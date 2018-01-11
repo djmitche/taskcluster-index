@@ -142,7 +142,6 @@ Namespace.ensureNamespace = function(namespace, expires) {
 
 /**Delete expired entries */
 Namespace.expireEntries = function(now, indexedTask, continuationToken=null) {
-  //console.log(`expireEntries in '${parent}' with token '${continuationToken}'`);
   return this.scan({
     expires: Entity.op.lessThan(now),
   },
@@ -150,7 +149,6 @@ Namespace.expireEntries = function(now, indexedTask, continuationToken=null) {
     limit:         500,
     continuation:   continuationToken,
   }).then(async (data) => {
-    console.log('..namespaces', data);
     var dataLength = data.entries.length;
     
     for (var i=0; i<dataLength; i++) {
@@ -165,7 +163,7 @@ Namespace.expireEntries = function(now, indexedTask, continuationToken=null) {
       // always later than the child's. Hence, we can delete an
       // entry without checking its children.
       console.log(`remove namespace ${namespace}`);
-      entry.remove(false, true);
+      //entry.remove(false, true);
     }
 
     if (data.continuation) {
@@ -191,7 +189,7 @@ IndexedTask.expireTasks = function(now, continuationToken=null) {
     for (var i=0; i<dataLength; i++) {
       task = data.entries[i];
       console.log(`remove task ${task.name}`);
-      task.remove(false, true);
+      //task.remove(false, true);
     }
     if (data.continuation) {
       await IndexedTask.expireTasks(now, data.continuation) ;
